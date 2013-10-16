@@ -56,6 +56,24 @@ module Facter::Util::EC2
   end
 
   ##
+  # define_instance_identify_facts pulls data from the instance-identity API
+  # endpoint and defines additional facts that metadata does not fetch such as
+  # ec2_region
+  def self.define_instance_identity_facts
+    begin
+      open("http://169.254.169.254/latest/dynamic/instance-identity/document") do |f|
+        json_string = f.read
+        JSON.parse(json_string).each do |k,v|
+          symbol = "ec2_#{k}".to_sym
+          Facter.add(symbol) { setcode { v } }
+        end
+      end
+    rescue *CONNECTION_ERRORS => details
+      Facter.warn "Could not retrieve ec2 instance-identity document: #{details.message}"
+    end
+  end
+
+  ##
   # with_metadata_server takes a block of code and executes the block only if
   # Facter is running on node that can access a metadata server at
   # http://169.254.168.254/.  This is useful to decide if it's reasonably
@@ -185,6 +203,7 @@ module Facter::Util::EC2
     with_metadata_server :timeout => 50 do
       define_userdata_fact
       define_metadata_facts
+      define_instance_identity_facts
     end
   end
 end
