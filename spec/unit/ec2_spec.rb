@@ -74,6 +74,20 @@ describe "ec2 facts" do
       Facter.fact(:ec2_foo_bar).value.should == "baz"
     end
 
+    it "should create instance identity facts" do
+      util.stubs(:read_uri).
+        with("#{api_prefix}/latest/meta-data/").
+        returns("")
+      util.stubs(:read_uri).
+        with("#{api_prefix}/latest/dynamic/instance-identity/document").
+        returns("{\n  \"region\" : \"ap-southeast-2\",\n  \"instanceId\" : \"i-71d0204d\",\n  \"billingProducts\" : null,\n  \"version\" : \"2010-08-31\",\n  \"accountId\" : \"513854853111\",\n  \"kernelId\" : \"aki-31990e0b\",\n  \"ramdiskId\" : null,\n  \"architecture\" : \"x86_64\",\n  \"imageId\" : \"ami-a148d59b\",\n  \"pendingTime\" : \"2013-10-16T03:33:10Z\",\n  \"instanceType\" : \"t1.micro\",\n  \"availabilityZone\" : \"ap-southeast-2a\",\n  \"devpayProductCodes\" : null,\n  \"privateIp\" : \"10.0.2.50\"\n}")
+
+      Facter::Util::EC2.add_ec2_facts(:force => true)
+
+      Facter.fact(:ec2_availability_zone).value.should == "ap-southeast-2a"
+      Facter.fact(:ec2_region).value.should == "ap-southeast-2"      
+    end
+
     it "should create ec2_userdata fact" do
       util.stubs(:read_uri).
         with("#{api_prefix}/latest/meta-data/").

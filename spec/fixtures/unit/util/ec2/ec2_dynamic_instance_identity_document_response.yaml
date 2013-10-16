@@ -1,0 +1,41 @@
+--- !ruby/object:Net::HTTPOK 
+body: |-
+  {
+    "region" : "ap-southeast-2",
+    "instanceId" : "i-71d0204d",
+    "billingProducts" : null,
+    "version" : "2010-08-31",
+    "accountId" : "513854853111",
+    "kernelId" : "aki-31990e0b",
+    "ramdiskId" : null,
+    "architecture" : "x86_64",
+    "imageId" : "ami-a148d59b",
+    "pendingTime" : "2013-10-16T03:33:10Z",
+    "instanceType" : "t1.micro",
+    "availabilityZone" : "ap-southeast-2a",
+    "devpayProductCodes" : null,
+    "privateIp" : "10.0.2.50"
+  }
+body_exist: true
+code: "200"
+header: 
+  connection: 
+  - close
+  server: 
+  - EC2ws
+  date: 
+  - Wed, 16 Oct 2013 04:59:51 GMT
+  etag: 
+  - "\"3380703336\""
+  content-length: 
+  - "439"
+  last-modified: 
+  - Wed, 16 Oct 2013 03:42:46 GMT
+  accept-ranges: 
+  - bytes
+  content-type: 
+  - text/plain
+http_version: "1.0"
+message: OK
+read: true
+socket: 
