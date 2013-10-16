@@ -1,5 +1,6 @@
 require 'timeout'
 require 'open-uri'
+require 'json'
 
 # Provide a set of utility static methods that help with resolving the EC2
 # fact.
@@ -64,7 +65,7 @@ module Facter::Util::EC2
       open("http://169.254.169.254/latest/dynamic/instance-identity/document") do |f|
         json_string = f.read
         JSON.parse(json_string).each do |k,v|
-          symbol = "ec2_#{k}".to_sym
+          symbol = "ec2_#{k}".gsub(/([A-Z]+)/,'_\1').downcase.to_sym
           Facter.add(symbol) { setcode { v } }
         end
       end
